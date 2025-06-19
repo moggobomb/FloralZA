@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>베르단트 둠: 초록빛 파멸의 세계</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&family=Creepster&display=swap');
+
+        :root {
+            --dark-green: #2c3e2f;
+            --mid-green: #4a6a4d;
+            --light-green: #88a78b;
+            --brown-dark: #3a2e2a;
+            --brown-mid: #5e4a41;
+            --grey-text: #c0c0c0;
+            --white-fade: rgba(255, 255, 255, 0.8);
+            --black-fade: rgba(0, 0, 0, 0.7);
+            --accent-red: #cc3333;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: var(--dark-green);
+            color: var(--grey-text);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            background-image: url('https://via.placeholder.com/1920x1080/2c3e2f/4a6a4d?text=Overgrown_City_Background'); /* 배경 이미지 URL */
+            background-size: cover;
+            background-attachment: fixed;
+        }
+
+        .header {
+            background: var(--black-fade);
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            border-bottom: 3px solid var(--mid-green);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header h1 {
+            font-family: 'Creepster', cursive;
+            font-size: 3.5em;
+            margin: 0;
+            color: var(--light-green);
+            text-shadow: 2px 2px 5px var(--brown-dark);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+            background: var(--black-fade);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border-left: 5px solid var(--mid-green);
+            border-radius: 5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section h2 {
+            color: var(--light-green);
+            font-size: 2em;
+            margin-top: 0;
+            border-bottom: 2px dashed var(--mid-green);
+            padding-bottom: 10px;
+        }
+
+        .section p {
+            margin-bottom: 10px;
+        }
+
+        /* Interactive Elements */
+        .accordion-header {
+            background-color: var(--brown-dark);
+            color: var(--white-fade);
+            cursor: pointer;
+            padding: 15px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 1.1em;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+            border-radius: 4px;
+        }
+
+        .accordion-header:hover {
+            background-color: var(--brown-mid);
+        }
+
+        .accordion-header.active {
+            background-color: var(--mid-green);
+            color: white;
+        }
+
+        .accordion-content {
+            padding: 0 18px;
+            background-color: rgba(0, 0, 0, 0.4);
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, padding 0.5s ease-out;
+            border-radius: 0 0 4px 4px;
+        }
+
+        .accordion-content.show {
+            max-height: 500px; /* Adjust based on content */
+            padding: 18px;
+        }
+
+        .tab-buttons {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap; /* Allow wrapping for smaller screens */
+        }
+
+        .tab-button {
+            background-color: var(--brown-dark);
+            color: var(--grey-text);
+            border: 1px solid var(--mid-green);
+            padding: 10px 15px;
+            cursor: pointer;
+            margin: 5px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            border-radius: 5px;
+        }
+
+        .tab-button.active {
+            background-color: var(--mid-green);
+            color: white;
+            border-color: white;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px 0;
+            border-top: 1px dashed var(--mid-green);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .tooltip-container {
+            position: relative;
+            display: inline-block;
+            cursor: help;
+            border-bottom: 1px dotted var(--light-green);
+        }
+
+        .tooltip-text {
+            visibility: hidden;
+            width: 250px;
+            background-color: var(--brown-dark);
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%; /* Position above the text */
+            left: 50%;
+            margin-left: -125px; /* Center the tooltip */
+            opacity: 0;
+            transition: opacity 0.3s;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        .tooltip-container:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background-color: var(--brown-dark);
+            border: 1px solid var(--mid-green);
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h3 {
+            color: var(--light-green);
+            margin-top: 0;
+            border-bottom: 1px dotted var(--light-green);
+            padding-bottom: 5px;
+        }
+
+        .card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .card ul li {
+            margin-bottom: 5px;
+        }
+
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            width: 2px;
+            background-color: var(--mid-green);
+            top: 0;
+            bottom: 0;
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .timeline-item.left {
+            flex-direction: row;
+        }
+
+        .timeline-item.right {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-content {
+            width: 45%;
+            background: var(--brown-dark);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .timeline-item.left .timeline-content {
+            margin-right: 5%;
+        }
+
+        .timeline-item.right .timeline-content {
+            margin-left: 5%;
+        }
+
+        .timeline-year {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: var(--mid-green);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 50%;
+            font-weight: bold;
+            z-index: 1;
+            white-space: nowrap;
+        }
+
+        /* Simple modal for detailed info */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1001; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.8); /* Black w/ opacity */
+            backdrop-filter: blur(8px);
+        }
+
+        .modal-content {
+            background-color: var(--brown-dark);
+            margin: 15% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid var(--mid-green);
+            width: 80%; /* Could be more or less, depending on screen size */
+            max-width: 700px;
+            border-radius: 8px;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.7);
+        }
+
+        .close-button {
+            color: var(--grey-text);
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            cursor: pointer;
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: var(--accent-red);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: var(--black-fade);
+            color: var(--grey-text);
+            margin-top: 40px;
+            border-top: 3px solid var(--mid-green);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5em;
+            }
+            .container {
+                width: 95%;
+                padding: 15px;
+            }
+            .section h2 {
+                font-size: 1.5em;
+            }
+            .timeline::before {
+                left: 20px;
+            }
+            .timeline-item {
+                flex-direction: column !important;
+                align-items: flex-start;
+            }
+            .timeline-content {
+                width: calc(100% - 40px); /* Adjust for left bar */
+                margin-left: 40px;
+            }
+            .timeline-item.left .timeline-content,
+            .timeline-item.right .timeline-content {
+                margin-right: 0;
+                margin-left: 40px; /* Align all to the right of the bar */
+            }
+            .timeline-year {
+                left: 20px;
+                transform: translate(-50%, -50%) rotate(90deg); /* Rotate for better fit */
+                top: 0;
+            }
+            .tab-button {
+                flex: 1 1 auto; /* Make buttons expand */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>베르단트 둠: 초록빛 파멸의 세계</h1>
+        <p>식물이 지배하는, 종말 이후의 생존 기록</p>
+    </div>
+
+    <div class="container">
+
+        <div class="section">
+            <h2>세계관 개요</h2>
+            <p>
+                이곳은 <strong>블룸 엔트로피 바이러스(BEV)</strong> 로 인해 인류 문명이 붕괴하고 식물 생명체가 지배하는 세상입니다. BEV는 원래 생태계 복원을 위해 개발되었으나  치명적인 변이를 일으켜 동식물 조직을 감염시킵니다.  감염된 숙주는 죽음 이후 식물 기반 조직으로 재활성화되어 <span class="tooltip-container">꽃 좀비(Floral Zombies)<span class="tooltip-text">숙주가 죽으면 BEV가 신경, 근육, 장기를 식물 기반 조직으로 대체하여 시체를 재활성화시켜 탄생합니다. </span></span>로 변모합니다. 
+            </p>
+            <p>
+                도시와 건물은 무성한 변이 식물들로 뒤덮여 있으며 , 자연이 공격적으로 도시 지역을 점령하여 <span class="tooltip-container">섬뜩하고 아름다운 풍경<span class="tooltip-text">폐허가 된 도시와 건물은 무성하고 변이된 식물 생명체로 광범위하게 뒤덮여 있습니다.  자연이 도시 지역을 공격적으로 되찾아 섬뜩하면서도 위험한 풍경을 만들어냈습니다. </span></span>을 형성합니다.  기술 수준은 2024년 미국과 같으나  문명은 붕괴하여 대규모 통신은 불가능하며 , 대부분의 정착지는 편지, 비둘기, 공공 통신 노드에 의존합니다. 
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>BEV 감염 및 변이</h2>
+            <button class="accordion-header">블룸 엔트로피 바이러스 (BEV) 상세 정보</button>
+            <div class="accordion-content">
+                <p><strong>감염원 이름:</strong> 블룸 엔트로피 바이러스 (BEV) </p>
+                <p><strong>원래 목적:</strong> 식물의 성장과 회복력을 가속화하여 생태계를 복원하기 위해 설계되었습니다. </p>
+                <p><strong>돌연변이 결과:</strong> 동물 및 인간 조직을 감염시키도록 치명적으로 변이했습니다. </p>
+                <p><strong>재활성화 과정:</strong> 숙주가 죽으면 BEV가 신경, 근육, 장기를 식물 기반 조직으로 대체하여 시체를 재활성화시켜 꽃 좀비로 만듭니다. </p>
+            </div>
+
+            <button class="accordion-header">감염 메커니즘: 전파 및 타임라인</button>
+            <div class="accordion-content">
+                <p><strong>전파 매개체:</strong> 상처, 포자, 오염된 물, 공기 중 꽃가루, 기생 곤충 </p>
+                <p><strong>감염 타임라인:</strong></p>
+                <ul>
+                    <li><strong>0-24시간:</strong> 고열, 환각, 근육 경련. </li>
+                    <li><strong>24-48시간:</strong> 피하 식물 성장 (피부 아래 섬유 뿌리, 덩굴). </li>
+                    <li><strong>48+시간:</strong> 신경망이 식물 구조로 대체, 완전한 운동 재활성화, 외부 식물 구조 (잎, 꽃, 나무껍질) 출현. </li>
+                </ul>
+                <p><strong>가역성:</strong> 드물게 가능. 1단계에서 감염된 부위를 신속하게 절단하거나 실험적인 항바이러스 곰팡이 혈청으로만 가능합니다. </p>
+            </div>
+
+            <button class="accordion-header">감염된 개체 일반 프로필: 식물-좀비</button>
+            <div class="accordion-content">
+                <p><strong>일반 명칭:</strong> 좀비 </p>
+                <p><strong>신경계:</strong> 체관부/물관부와 같은 혈관 구조로 대체; 화학적/수압적 통신을 사용합니다. </p>
+                <p><strong>근육계:</strong> 강화된 식물 줄기로 둘러싸이거나 대체됩니다 (인장 강도, 폭발적인 움직임). </p>
+                <p><strong>감각 기관:</strong> 눈은 퇴화; 빛에 민감한 꽃잎, 열 감지 덩굴, 향기 수용체 꽃으로 대체됩니다. </p>
+                <p><strong>인지:</strong> 초보적; 영역 본능, 빛 추구 행동, 화학적 신호 (CO2, 땀, 페로몬)에 의해 움직입니다. </p>
+                <p><strong>대사:</strong> 광합성 (낮), 유기물 분해 및 공생 곰팡이 (어둠)에 의해 동력을 얻습니다. </p>
+                <p><strong>활동 주기:</strong> 햇빛이 비치는 동안 훨씬 더 활동적입니다. 친광성 행동이 일반적입니다.  밤/지하에서는 극적으로 느려집니다. </p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>감염된 변종 유형</h2>
+            <div class="tab-buttons">
+                <button class="tab-button active" onclick="openTab(event, 'Vinewalker')">덩굴걸이</button>
+                <button class="tab-button" onclick="openTab(event, 'Faceblossom')">꽃가면</button>
+                <button class="tab-button" onclick="openTab(event, 'Sapwailer')">수액울음</button>
+                <button class="tab-button" onclick="openTab(event, 'Mycosaber')">참균귀</button>
+                <button class="tab-button" onclick="openTab(event, 'Deepseed')">심종</button>
+            </div>
+
+            <div id="Vinewalker" class="tab-content active">
+                <h3>덩굴걸이 (Vinewalker) </h3>
+                <p><strong>외형:</strong> 두꺼운 녹색 덩굴로 심하게 휘감겨 있고 얽혀있는 인간형 형태, 일부 부분은 거친 나무껍질과 융합된 것처럼 보입니다.  사지는 눈에 띄게 나무 줄기로 구성될 수 있습니다. </p>
+                <p><strong>행동:</strong> 일반적으로 느리게 움직이지만 믿을 수 없을 정도로 회복력이 강합니다.  방해를 받거나 먹이가 접근할 때까지 종종 휴면 상태로 발견되어 과성장된 환경의 일부처럼 보입니다. </p>
+                <p><strong>강점:</strong> 조밀한 덩굴/나무껍질 층으로 인해 재래식 총격에 매우 강합니다.  특히 충분한 햇빛 광합성이 있을 경우 손상된 사지를 천천히 재생할 수 있습니다. </p>
+                <p><strong>약점:</strong> 불에 취약합니다.  제초제나 강력한 식물 방지 화학 물질은 급속한 부패를 일으킬 수 있습니다. </p>
+            </div>
+
+            <div id="Faceblossom" class="tab-content">
+                <h3>꽃가면 (Faceblossom) </h3>
+                <p><strong>외형:</strong> 머리와 얼굴이 크고 선명하며 종종 아름다운 꽃 (예: 거대한 장미, 난초 또는 가상의 잡종 꽃)으로 완전히 대체된 인간형 형태.  꽃잎이 미묘하게 뛰거나 경련할 수 있습니다. </p>
+                <p><strong>행동:</strong> 매복 포식자. 종종 가만히 있으면서 식물과 섞여 있습니다.  가볍고 달콤한 향기와 매혹적인 색깔로 먹이를 유인합니다. </p>
+                <p><strong>특수 능력:</strong> 얼굴 꽃은 미세하고 거의 보이지 않는 환각성 꽃가루를 방출합니다.  노출되면 혼란, 행복감, 감각 왜곡 또는 일시적인 마비를 유발하여 먹이를 쉽게 잡을 수 있습니다. </p>
+                <p><strong>변종 유형:</strong> 일반적으로 그늘지고 습한 지역에서 번성하는 친균성 변종입니다. </p>
+                <p><strong>약점:</strong> 직사광선(자연 햇빛 또는 인공)에 장시간 노출되면 꽃이 빠르게 시들 수 있습니다.  친균성 특성이 지배적일 경우 표적 항진균제에 취약합니다. </p>
+            </div>
+
+            <div id="Sapwailer" class="tab-content">
+                <h3>수액울음 (Sapwailer) </h3>
+                <p><strong>외형:</strong> 몸의 모공, 상처 또는 특수 꽃 구조에서 끈적하고 영양분이 풍부한 수액을 끊임없이 흘려 윤기 나는 인간형 형태입니다.  늘어진 "울음" 식물 부위를 가질 수 있습니다. </p>
+                <p><strong>행동:</strong> 개방된 지형에서 수 마일까지 퍼질 수 있는 믿을 수 없을 정도로 높은 음의 울음소리를 내는 것으로 알려져 있습니다.  이 소리는 다른 근처 감염된 개체에 대한 조난/유인 신호입니다. </p>
+                <p><strong>특수 능력:</strong> 주요 기능은 신호 전달이며, 감염된 무리를 자신의 위치나 인지된 위협/먹이의 위치로 끌어들일 수 있습니다. </p>
+                <p><strong>약점:</strong> 특정 음파 주파수에 면역인 사람들 (예: 귀머거리, 특수 귀마개 착용자)은 주요 유인 능력에 영향을 받지 않습니다.  끊임없는 수액 누출로 인해 끈적거리고 때로는 느려질 수 있습니다. </p>
+            </div>
+
+            <div id="Mycosaber" class="tab-content">
+                <h3>참균귀 (Mycosaber) </h3>
+                <p><strong>외형:</strong> 한쪽 또는 양쪽 팔, 때로는 다른 사지가 단단하고 칼날 같은 곰팡이 성장으로 변이된 인간형 형태.  이 "사벨" 사지는 종종 날카롭고 키틴질이며 변색되어 있습니다 (예: 짙은 갈색, 회색, 병든 노란색). </p>
+                <p><strong>행동:</strong> 극도로 공격적이고 민첩합니다.  곰팡이 칼날로 빠르고 돌진하는 움직임과 치명적인 베기 공격이 가능합니다.  종종 어둡고 습한 환경에서 발견됩니다. </p>
+                <p><strong>참고:</strong> 자신의 영역을 침범하거나 광란 상태에 있을 경우 다른 감염된 개체를 공격하는 것으로 알려져 있습니다.  매우 위험한 근접 전투원입니다. </p>
+                <p><strong>약점:</strong> 강한 자외선 (자연 햇빛 또는 인공)에 장시간 노출되면 곰팡이 성분이 말라붙고 부서지기 쉬우며 결국 썩거나 부서집니다. </p>
+            </div>
+
+            <div id="Deepseed" class="tab-content">
+                <h3>심종 (Deepseed) </h3>
+                <p><strong>분류:</strong> 대규모의 주로 움직이지 않는 수많은 시체, 엉킨 나무 뿌리, 두꺼운 덩굴, 거대한 곰팡이 성장의 융합체.  땅속 깊이 뿌리 박은 중앙 "심장" 또는 "핵심"을 형성하며, 종종 기괴한 살아있는 언덕이나 거대한, 변질된 나무와 유사합니다. </p>
+                <p><strong>행동:</strong> 뿌리 박힌 위치에서 움직이지 않습니다. 대신 전체 지역 감염 생물 군계의 제어 허브 역할을 합니다. </p>
+                <p><strong>특수 능력:</strong> 광범위한 지하 균근 (곰팡이 뿌리) 네트워크를 통해 화학적 또는 생체 전기 신호를 전송하여 근처 감염된 개체 (수 킬로미터에 걸쳐)를 제어하고 조정합니다.  동기화된 공격을 유발하거나, 감염된 개체의 움직임을 지시하거나, 심지어 주변의 식물 성장을 가속화할 수 있습니다. </p>
+                <p><strong>위치:</strong> 변이된 식물군에 의해 완전히 압도적으로 점령된 폐허의 중심부에서 일반적으로 발견되며, 종종 이전 인구 밀도가 높거나 대규모 전멸 전 인프라가 있던 장소에 있습니다. </p>
+                <p><strong>위협 수준:</strong> 극심. 심종을 물리치려면 핵심을 파괴해야 하는데, 이는 일반적으로 통제된 무리와 자체적인 강력한 재생 능력으로 인해 심하게 보호됩니다. </p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>주요 인간 세력</h2>
+            <p>문명이 붕괴된 아메리카에는 다양한 생존자 집단이 존재합니다.</p>
+            <div class="card-grid">
+                <div class="card" onclick="openModal('wardensModal')">
+                    <h3>워든 (The Wardens) </h3>
+                    <p><strong>이념:</strong> "힘을 통한 질서." 훈련된 계층, 압도적인 화력, 옛 군사주의 부활만이 혼돈에서 문명을 되찾을 수 있다고 믿습니다. </p>
+                    <p><strong>수도:</strong> <span class="tooltip-container">에어리 (The Aerie)<span class="tooltip-text">콜로라도 스프링스 고지대 사막 고원에 위치한 요새화된 고층 도시.  한때는 광대한 국제 공군 기지이자 항공 우주 단지였으나, 현재는 대륙에 남은 가장 요새화된 군사 지휘부로 개조되었습니다. </span></span> </p>
+                    <p><strong>통치:</strong> 워든-장군 로이스 매독스가 실질적으로 통치하는 군사 정권. </p>
+                </div>
+                <div class="card" onclick="openModal('harvestersModal')">
+                    <h3>하베스터 (The Harvesters) </h3>
+                    <p><strong>이념:</strong> "지성의 무한한 발전." BEV를 자연재해이자 심오한 기회로 봅니다.  BEV와 공존하거나 심지어 통제할 수 있는 "새로운 인류"를 창조하는 것이 핵심 임무입니다. </p>
+                    <p><strong>수도:</strong> <span class="tooltip-container">시드뱅크 (The Seedbank)<span class="tooltip-text">오레곤 주 고지대 숲에 자리 잡은 연구 요새.  원래 BEV 재앙 이전에는 차세대 생명 공학 벤처 캠퍼스였습니다. </span></span> </p>
+                    <p><strong>통치:</strong> "수석 연구원"이 거의 절대적인 권한으로 통치하는 과학 메리토크라시. </p>
+                </div>
+                <div class="card" onclick="openModal('childrenOfBloomModal')">
+                    <h3>블룸의 아이들 (Children of Bloom) </h3>
+                    <p><strong>이념:</strong> 감염은 죽음이 아니라 변성, 즉 진정한 평화와 통일을 가져다주는 신성한 개화라고 믿습니다.  저항은 썩는 것이고, 받아들이는 것은 피어나는 것입니다. </p>
+                    <p><strong>수도:</strong> <span class="tooltip-container">블룸필드 (Bloomfield)<span class="tooltip-text">뉴욕 북부의 정신병원 폐허가 과성장하여 변이 식물로 뒤덮인 곳. </span></span> </p>
+                    <p><strong>통치:</strong> "세라피엘"이 이끄는 신정 컬트. </p>
+                </div>
+                <div class="card">
+                    <h3>노마드 캐러밴 (Nomad Caravans) </h3>
+                    <p><strong>이념:</strong> "길이 제공하고, 거래는 신성하다." 생존, 이동의 자유, 계약의 신성함을 가장 중요하게 생각합니다. </p>
+                    <p><strong>특징:</strong> 스캐빈저와 상인들의 느슨한 연합으로, 끊임없이 이동합니다.  교역망, 생존 기술, 차량 호송대를 보유하고 있습니다.  자유와 실용주의를 중시합니다. </p>
+                </div>
+                <div class="card">
+                    <h3>언바운드 (The Unbound) </h3>
+                    <p><strong>특징:</strong> 통일된 세력이 아닌, 특출난 기술과 독립성을 가진 개인 또는 소규모 집단을 총칭하는 용어입니다.  자신만의 규칙에 따라 세상을 헤쳐나가며, 개인적인 목표 (생존, 복수, 발견, 이익)에 의해 움직입니다.  그들의 존재는 예측 불가능하며, 그들의 충성은 유동적이어서, 더 큰 갈등 속에서 와일드 카드로 간주됩니다. </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>주요 지역</h2>
+            <p>재앙 이후의 아메리카에 존재하는 핵심 거점 및 지역입니다.</p>
+            <div class="card-grid">
+                <div class="card" onclick="openModal('aerieLocationModal')">
+                    <h3>에어리 (The Aerie) </h3>
+                    <p><strong>통제 세력:</strong> 워든 </p>
+                    <p><strong>특징:</strong> 요새화된 고층 도시 (덴버).  수직 농장, 감시탑, 군 검문소를 보유하고 있습니다.  저항과 질서의 상징입니다. </p>
+                </div>
+                <div class="card" onclick="openModal('seedbankLocationModal')">
+                    <h3>시드뱅크 (The Seedbank) </h3>
+                    <p><strong>통제 세력:</strong> 하베스터 </p>
+                    <p><strong>특징:</strong> 재활용된 연구 캠퍼스 (오레곤).  연구실, 격리 구역, 유전자 은행을 보유하고 있습니다.  비도덕적인 과학 및 생체 공학의 중심지입니다. </p>
+                </div>
+                <div class="card" onclick="openModal('bloomfieldLocationModal')">
+                    <h3>블룸필드 (Bloomfield) </h3>
+                    <p><strong>통제 세력:</strong> 블룸의 아이들 </p>
+                    <p><strong>특징:</strong> 과성장된 병원 폐허 (뉴욕 북부).  생체 발광 식물군, 안개 낀 복도, 교감 분지를 보유하고 있습니다.  세라피엘 신앙의 기원지입니다. </p>
+                </div>
+                <div class="card">
+                    <h3>러스트 벨트 (The Rust Belt) </h3>
+                    <p><strong>특징:</strong> 산업 도시의 폐허 (디트로이트/피츠버그).  버려진 공장, 고철, 스캐빈저 캠프를 보유하고 있습니다.  자원이 풍부한 분쟁 지역입니다. </p>
+                </div>
+                <div class="card">
+                    <h3>헬스 게이트 댐 (Hell's Gate Dam) </h3>
+                    <p><strong>특징:</strong> 거대한 수력 발전 댐.  기능하는 터빈, 광대한 저수지, 제어실을 보유하고 있습니다.  전략적으로 중요한 요충지이며, 막대한 잠재적 전력원입니다. </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>붕괴 연대기</h2>
+            <p>공식적으로 분류 해제된 BEV 발발 및 붕괴 타임라인입니다.</p>
+            <div class="timeline">
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <h3>BC (-10 ~ -2년) </h3>
+                        <p><strong>프로젝트 에덴:</strong> 사막화에 맞서고 손상된 생태계를 복원하기 위해 BEV를 개발합니다. 초기 시험은 매우 성공적입니다. </p>
+                    </div>
+                </div>
+                <div class="timeline-item right">
+                    <div class="timeline-content">
+                        <h3>BF 0년, Day 0 (블룸폴 사건) </h3>
+                        <p>BEV의 치명적인 돌연변이가 주요 연구 시설에서 감지됩니다. 바이러스가 에어로졸화되어 격리 구역을 뚫고 나와 지역 동식물을 감염시킵니다. 이것이 붕괴의 시작으로 간주됩니다. </p>
+                    </div>
+                </div>
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <h3>BF 0년, 1-4주 </h3>
+                        <p>초기 인간 감염은 공격적인 곰팡이 폐렴으로 오인됩니다. 감염된 개인은 48시간 이내에 사망하기 전에 극심한 열과 환각을 보이다가 재활성화됩니다.  "꽃 좀비"라는 용어가 대중의 용어로 사용되기 시작합니다. </p>
+                    </div>
+                </div>
+                <div class="timeline-item right">
+                    <div class="timeline-content">
+                        <h3>BF 0년, 2-6개월 (작전 파이어브레이크) </h3>
+                        <p>전 세계 군대가 발병 진원지 주변에 격리 구역과 방화선을 구축하려고 시도합니다. BEV의 공기 전파 (포자, 꽃가루)가 기존 경계를 우회하면서 작전은 치명적으로 실패합니다. 이 실패는 광범위한 사회 붕괴로 이어집니다. </p>
+                    </div>
+                </div>
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <h3>BF 0년, 9개월 </h3>
+                        <p>최초로 확인된 "심종" 개체가 주요 대도시 중심에서 출현하여 거대한, 조정된 감염 생물 군계를 만들고 집단 지성을 보여줍니다.  이것은 도시를 되찾는 것이 거의 불가능해지는 시점입니다. </p>
+                    </div>
+                </div>
+                <div class="timeline-item right">
+                    <div class="timeline-content">
+                        <h3>BF 1-2년 (긴 겨울) </h3>
+                        <p>글로벌 인프라가 파괴된 상태에서, 붕괴 후 첫 겨울은 준비되지 않은 생존자들 사이에 막대한 사상자를 냅니다.  주요 생존자 세력 (워든, 초기 하베스터)은 이 극심한 어려움의 시기에 권력 기반을 강화하여 새롭고 잔인한 세계 질서를 확립합니다. </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>동적 생태 이벤트</h2>
+            <p>베르단트 둠 세계의 환경적 위험 및 현상입니다. 이들은 예측할 수 없으며 생존에 큰 영향을 미칩니다.</p>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>꽃가루 안개 (Pollen Haze) </h3>
+                    <p>거대한 꽃숲에서 나오는 짙고 반짝이는 꽃가루 안개입니다. 환각, 졸음을 유발하거나 BEV 증상을 악화시킬 수 있습니다.  항공기를 착륙시키고 모든 지상 여행자가 피난처를 찾도록 강제할 수 있습니다. </p>
+                </div>
+                <div class="card">
+                    <h3>뿌리 진동 (Root Tremor) </h3>
+                    <p>심종의 뿌리 네트워크의 지하 이동입니다. 지역 지진을 일으키고, 균열을 열고, 풍경을 바꿀 수 있습니다.  숨겨진 지하 구조물을 드러내거나 확립된 경로를 차단할 수 있습니다. </p>
+                </div>
+                <div class="card">
+                    <h3>피의 개화 (Blood Bloom) </h3>
+                    <p>식물이 진한 진홍색으로 피어나는 드문, 빠른 개화 현상입니다.  극도로 공격적인 감염 변종을 유인하고, 지역 감염 인구를 급격히 증가시킵니다.  심종이 영향력을 확장하는 신호입니다. </p>
+                </div>
+                <div class="card">
+                    <h3>고요한 낙엽 (The Silent Fall) </h3>
+                    <p>모든 지역 감염체가 몇 시간 동안 완전히 휴면 상태가 되고 침묵하는 설명할 수 없는 현상입니다.  섬뜩한 고요함을 만들어내며, 고위험 수집 또는 여행의 기회를 제공합니다.  원인은 알려져 있지 않으며 그 끝은 갑작스럽습니다. </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>생존 및 전투 수칙</h2>
+            <p>이 위험한 세계에서 살아남기 위한 핵심 고려 사항입니다.</p>
+            <ul>
+                <li><strong>감염체의 본질:</strong> 전통적인 걸어 다니는 시체가 아니라, 죽은 조직을 활성화하는 살아있는 식물 시스템입니다. </li>
+                <li><strong>제거 방법:</strong> 헤드샷은 종종 신뢰할 수 없습니다.  숙주 내의 핵심 뿌리 네트워크를 완전히 파괴해야 합니다. </li>
+                <li><strong>미학적 위험:</strong> 일부 감염체는 숨 막힐 정도로 아름다우며, 자연 방어 또는 유인책으로 눈부신 꽃을 피웁니다. </li>
+                <li><strong>생존자의 다양한 반응:</strong> 일부는 감염체를 숭배하거나 연구하거나 심지어 교배를 시도할 수도 있습니다. </li>
+                <li><strong>집단 지성 가설:</strong> 특히 심종 개체 근처에서 조정된 행동이 관찰되며, 화학적 (균사체 네트워크), 빛 또는 아음속 신호를 통한 집단 지성을 시사합니다. </li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>핵심 자원</h2>
+            <p>갈등과 생존을 이끄는 중요한 자원들입니다.</p>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>생존 가능한 씨앗 (Viable Seeds) </h3>
+                    <p>BEV에 오염되지 않은 지속 가능한 농업용 씨앗. 식량 안보와 재건의 잠재력을 가지고 있습니다.  세력들이 비축하며, 엄청난 희망과 가치의 원천입니다. </p>
+                </div>
+                <div class="card">
+                    <h3>붕괴 전 연료 저장고 (Pre-Collapse Fuel Cache) </h3>
+                    <p>봉인된 휘발유, 디젤 또는 에탄올 비축분. 차량, 발전기 동력에 필수적입니다.  워든의 이동성과 하베스터 실험실에 필수적이며, 극히 희귀하고 불안정합니다. </p>
+                </div>
+                <div class="card">
+                    <h3>항바이러스 곰팡이 혈청 (Antiviral Fungal Serum, AFS) </h3>
+                    <p>특정 곰팡이에서 추출한 희귀하고 실험적인 치료법. 1단계 BEV 감염을 중단시킬 수 있으나, 치료제는 아닙니다.  매우 인기 있으며, 그 공식은 치명적인 비밀입니다. </p>
+                </div>
+                <div class="card">
+                    <h3>깨끗한 물 공급원 (Clean Water Source) </h3>
+                    <p>오염되지 않은 대수층, 강 또는 기능하는 정수 시스템. 생명 유지에 필수적인 물을 제공합니다.  안정적인 정착지의 기반이며, 치열하게 방어됩니다. </p>
+                </div>
+                <div class="card">
+                    <h3>기능하는 통신 어레이 (Functional Comms Array) </h3>
+                    <p>손상되지 않은 위성 업링크 또는 무선 중계탑. 장거리 통신 및 전략적 이점을 제공합니다.  정보 흐름을 제어하며, 주요 군사 목표입니다. </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>에코 릴레이 시스템</h2>
+            <p>생존한 기술: 에코 릴레이 네트워크는 폐허 속에서 소통의 생명줄 역할을 합니다.</p>
+            <ul>
+                <li><strong>이름:</strong> 에코 릴레이 네트워크 (일반적으로 에코 릴레이, 에코 박스, 러스트보드라고 불림) </li>
+                <li><strong>기원:</strong> 생태 재난 시 지역 통신 유지를 위한 붕괴 전 FEMA 이니셔티브. </li>
+                <li><strong>기능:</strong> 붕괴에서 살아남은 지역, 단거리 아날로그/디지털 하이브리드 터미널.  특히 언바운드와 같은 프리랜서를 위해 현장 통신을 남기고, 받고, 동기화하는 데 사용됩니다. </li>
+                <li><strong>외형:</strong> 녹슬고 버튼이 바래고 모듈식 화면이 있는 금속 콘솔. 종종 학교, 시청, 산림 관리소와 같은 버려진 공공 건물에 볼트로 고정되어 있습니다.  전원은 폐기된 배터리, 크랭크 발전기 또는 태양광 장비를 사용합니다. </li>
+                <li><strong>사용법:</strong> 요청자는 내장된 음성 또는 텍스트 입력을 사용하여 작업 데이터, 경고 또는 교환 제안을 남깁니다.  언바운드 여행자는 릴레이를 만났을 때 에코링크 손목 장치를 동기화합니다.  동기화되면 새로운 퀘스트, 현상금 또는 소문이 자동으로 다운로드됩니다.  수락되면 다음 동기화 주기 동안 응답이 다시 업로드됩니다. </li>
+                <li><strong>문화적 역할:</strong> 에코 릴레이는 황무지에서 신성하고 중립적인 공간으로 간주됩니다.  이를 방해하거나 약탈하는 것은 좋지 않은 행동 (심지어 자살 행위)으로 간주됩니다.  많은 유목민들이 그 위에 낙서, 경고, 시 또는 암호화된 기호를 남깁니다. </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2025 베르단트 둠. 모든 권리 보유.</p>
+        <p>본 세계관 정보는 'za_grouped.txt' 파일에 기반합니다.</p>
+    </div>
+
+    <div id="wardensModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('wardensModal')">&times;</span>
+            <h2>워든 (The Wardens) </h2>
+            <p><strong>별칭:</strong> 요새 (The Bulwark), 황동 심장 (Brasshearts - 자기 비하적/자부심 있는 내부 은어), 청색 코트 (Bluecoats - 제복 색깔에서 유래한 일반 시민 용어), 독맨 (The Dogmen - 유목민/불신자들이 사용하는 경멸적인 용어. "그냥 명령만 짖어대는 사이코 병사들.") </p>
+            <p><strong>통치:</strong> 상징적인 민간 지도자가 있는 군사 정권.  실제로는 워든-장군 로이스 매독스 (Royce Maddox)가 이끄는 군사 지휘 구조에 의해 통치됩니다.  고위 장교들로 구성된 의회가 물류, 작전 및 통치를 처리합니다. </p>
+            <p><strong>이념:</strong> "힘을 통한 질서."  워든은 오직 훈련된 계층, 압도적인 화력, 그리고 옛 세계의 군사주의 부활만이 혼돈에서 문명을 되찾을 수 있다고 믿습니다.  그들은 자신을 정복자가 아니라 인류 최후의 질서 보루의 수호자로 봅니다. </p>
+            <p><strong>수도:</strong> 콜로라도 스프링스, 콜로라도의 고지대 사막 고원에 위치한 <span class="tooltip-container">에어리 (The Aerie)<span class="tooltip-text">한때는 광대한 국제 공군 기지이자 항공 우주 단지였으나, 현재는 대륙에 남은 가장 요새화된 군사 지휘부로 개조되었습니다. </span></span>. </p>
+            <p><strong>강점:</strong>
+                <ul>
+                    <li>정예의, 전투를 경험한 보병 및 공중 기병 부대 </li>
+                    <li>강력한 이동식 지휘 인프라 (비행선, 호송대) </li>
+                    <li>군사 전통과 지휘 계통에 기반한 강력한 사기 </li>
+                    <li>공격적이고 효율적인 감염체 방지 전략 </li>
+                    <li>지배력 과시를 통한 심리적 우위 (행진, 공중 비행, 선전) </li>
+                </ul>
+            </p>
+            <p><strong>약점:</strong>
+                <ul>
+                    <li>엄격하고 권위적임—반대를 반역으로 간주 </li>
+                    <li>경직된 관료주의, 비정상적인 위협에 대한 적응이 느림 </li>
+                    <li>연료, 탄약, 차량 유지 보수에 대한 높은 의존도 </li>
+                    <li>생태학적 통찰력이 부족함, BEV를 연구 대상이 아닌 "파괴해야 할 것"으로 간주 </li>
+                    <li>강제 징집 구역 및 합병 시도 때문에 중립 커뮤니티로부터 불만을 삼 </li>
+                </ul>
+            </p>
+            <p><strong>관계:</strong>
+                <ul>
+                    <li>노마드 캐러밴: 혼란스럽지만 용인됨; 정보 교환 및 지형 정찰에 사용됩니다. </li>
+                    <li>하베스터: 연약한 이상주의자로 일축; 비밀리에 그들의 생명공학 무기화 잠재력에 관심이 있습니다. </li>
+                    <li>블룸의 아이들: 성전 대상. 자비 없음, 외교 없음. </li>
+                </ul>
+            </p>
+            <p><strong>문화적 참고 사항:</strong>
+                <ul>
+                    <li>워든 통제하의 민간인 인구는 배급, 통금, 징집이 표준인 <strong>안전 구역 (Safe Grids)</strong>이라고 알려진 군사화된 구역에 거주합니다. </li>
+                    <li>선전 방송은 "건국 불꽃"을 숭배합니다—워든이 붕괴 초기 감염된 도시를 소이탄으로 폭격하여 수천 명을 구했다는 상징적인 재해석입니다. </li>
+                    <li>매독스는 많은 워든 병사들에게 조용히 전쟁 영웅으로 숭배됩니다;  초기 며칠 동안 감염된 가족 구성원을 직접 처형했다는 소문이 돌았습니다. </li>
+                    <li>체이스 웨스트브룩은 대중 연설에서 광택이 나는 의식용 제복을 자주 입고, 자신이 이해하지 못하는 대본을 읽습니다. </li>
+                </ul>
+            </p>
+            <p><strong>상징 및 자산:</strong>
+                <ul>
+                    <li><strong>아이언 벌처 (The Iron Vulture):</strong> 매독스와 웨스트브룩을 모두 태운다고 알려진 거대한 공중 지휘 드레드노트.  거의 보이지 않지만 항상 두려움을 불러일으킵니다. </li>
+                    <li><strong>계속의 깃발 (The Banner of Continuance):</strong> 새로운 워든 휘장이 오버레이된 오래된 미군 깃발로, 모든 전초 기지에 게양됩니다. </li>
+                    <li><strong>블랙 마르치 (The Black March):</strong> 반란을 일으킨 소규모 거점과 탈영병들을 잔인하게 진압하는 것으로 알려진 정예 부대. </li>
+                </ul>
+            </p>
+        </div>
+    </div>
+
+    <div id="harvestersModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('harvestersModal')">&times;</span>
+            <h2>하베스터 (The Harvesters) </h2>
+            <p><strong>별칭:</strong> 엔지니어 (The Engineers), 씨앗 관리자 (The Seed-Keepers), 블루머 (Bloomers - 일부 외부인들이 사용하는 경멸적인 속어. "좀비 꽃을 키우는 놈들."), 스포어헤드 (Sporeheads - 경멸적인 속어 "코에 포자가 박힌 놈들.") </p>
+            <p><strong>정부:</strong> "수석 연구원"이 거의 절대적인 권한으로 통치하는 과학 메리토크라시. </p>
+            <p><strong>표명된 이념:</strong> 'BEV 감염자들을 인간 상태로 되돌리기 위한 고귀한 대의.'  수석 연구원은 실제로 그러한 연구를 수행하지만, 이것이 전부는 아니라는 것은 공공연한 비밀입니다.  그러나 그들은 여전히 많은 비밀을 숨기고 있으며, 지식인 특유의 우아한 웅변으로 회피할 것입니다. </p>
+            <p><strong>주요 이념 (공개된 비밀):</strong> "지성의 무한한 발전."  그들은 블룸 엔트로피 바이러스(BEV)를 자연재해이자 심오한 기회로 봅니다.  그들의 핵심 임무는 박멸이 아니라 '유도된 진화'입니다.  그들은 BEV와 공존하거나 심지어 통제할 수 있는 "새로운 인류"를 창조하는 것을 추구합니다. </p>
+            <p><strong>방법 및 윤리:</strong> 윤리적으로 중립적이거나 비도덕적인 과학적 실용주의.  그들은 인간의 몸과 BEV 사이의 '자연적 융합'을 실험하여, 감염자를 단순히 죽이는 것이 아니라 통제 가능한 '숙주'로 변화시키는 것을 목표로 합니다.  자원 부족으로 인해, 그들은 건강한 외부인을 인간 실험의 '자발적 참여자'로 유인하는 것으로 알려져 있습니다.  이것은 깊은 내부 분열을 초래했습니다:</p>
+            <ul>
+                <li>주류 파벌: 모든 희생이 생존과 발전에 필요하다고 믿습니다. </li>
+                <li>반대파: 지도부가 도덕적 한계를 넘었다고 믿고 조직을 떠나거나 전복시키려는 소수 그룹. </li>
+            </ul>
+            <p><strong>수도:</strong> 거대한 살아있는 식물 구조물 위에 구축되고 통합된 연구 단지, <span class="tooltip-container">시드뱅크 (The Seedbank)<span class="tooltip-text">일부 구역은 연구를 위해 의도적으로 통제된 감염 환경으로 유지됩니다. </span></span>.  특정 구역은 연구를 위해 의도적으로 통제된 감염 환경으로 유지됩니다. </p>
+            <p><strong>기술:</strong>
+                <ul>
+                    <li>"성장 챔버": 생물학적 구조를 기술과 융합시키는 캡슐. 일부는 반쯤 감염되었지만 안정적인 생명체를 수용합니다. </li>
+                    <li>"공생 혈청": 연구 목적으로 감염된 피험자를 온순하고 생존 가능하게 유지하는 일시적인 안정제. </li>
+                    <li>"베르단트 엔진": BEV의 식물 에너지를 추출하고 변환하는 발전 시스템. </li>
+                </ul>
+            </p>
+            <p><strong>강점:</strong> BEV에 대한 타의 추종을 불허하는 과학적 이해, 독특하고 강력한 생명 공학 기술 보유, 높은 지능, 무자비하게 효율적이고 결과 지향적인 구조. </p>
+            <p><strong>약점:</strong> 대부분의 다른 생존자 집단에 의해 "비윤리적인 광신자"로 널리 불신받고 있습니다.  실패한 실험으로 인한 내부 감염 사건이 자주 발생하며, 연구원들이 고립된 실험실에서 서서히 식물과 같은 고정물로 변한다는 소문이 있습니다.  내부 불화가 불안정성을 야기하고 지식 있는 탈영병의 위험을 초래합니다. </p>
+            <p><strong>관계:</strong>
+                <ul>
+                    <li>워든: 표본 및 자원 확보를 위한 거래 관계. </li>
+                    <li>노마드 캐러밴: 실험적인 백신 및 혈청의 시험 대상 또는 시장으로 사용됩니다. </li>
+                    <li>블룸의 아이들: 철학적 반대편 (믿음 대 과학)으로 간주되지만, 두 세력 모두 BEV에 집착하여 이념적 라이벌입니다. </li>
+                </ul>
+            </p>
+            <p><strong>참고:</strong> 그들이 유지하는 깨끗한 "씨앗 금고"는 인류의 마지막 희망으로 제시되지만, 그 내부는 어두운 비밀, 아마도 원래 BEV 발병에 대한 단서를 포함하고 있을 수 있습니다.  하베스터에서 탈영한 사람들은 귀중한 정보를 가지고 있는 반역자로 간주되어 끈질기게 추적됩니다. </p>
+        </div>
+    </div>
+
+    <div id="childrenOfBloomModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('childrenOfBloomModal')">&times;</span>
+            <h2>블룸의 아이들 (Children of Bloom) </h2>
+            <p><strong>별칭:</strong> 아이들 (The Children), 백색 역병 (White Plague - 외부인들이 부름), 블룸퍼커 ("감염을 성화시킨다고? 감염 숭배하는 광신도들.") </p>
+            <p><strong>정부:</strong> "세라피엘," 최초의 피어난 자—눈이 빛나는 살아있는 꽃으로 가려진 우아한 남자—가 이끄는 신정 컬트.  그는 그들의 복음의 목소리이자, 처음으로 피를 흘린 자입니다. </p>
+            <p><strong>이념:</strong> 아이들은 감염이 죽음이 아니라 변성이라고 믿습니다—진정한 평화와 통일을 가져다주는 신성한 개화.  그들은 진화나 통제를 거부합니다; 대신 그들은 구원을 제공합니다.  고통, 기형, 광기—모두 피어나는 길의 시련입니다.  "저항은 썩는 것이다. 받아들이는 것은 피어나는 것이다." 그들의 설교는 정복이 아닌 해방에 대해 말합니다. </p>
+            <p><strong>수도:</strong> 뉴욕 북부의 정신병원 폐허가 과성장하여 생체 발광 식물과 짙은 안개로 뒤덮인 <span class="tooltip-container">블룸필드 (Bloomfield)<span class="tooltip-text">이곳은 에덴의 흉터의 자매 성역으로 속삭여집니다. </span></span>. </p>
+            <p><strong>성직자 계급:</strong>
+                <ul>
+                    <li>세라피엘, 최초의 피어난 자: 카리스마 있고 아름다우며 흔들림 없이 평온합니다.  세라피엘은 부드럽고 시적인 구절로 말하여 상처 입은 자들의 마음을 진정시키고 절망한 자들을 자신의 품으로 이끕니다.  항상 웃고, 항상 침착하며, 종종 자신과 완벽한 흰색 체스 게임을 하며, 각 수는 비유입니다.  그의 눈은 빛나는 꽃으로 가려져 있지만, 그의 시선은 깊이 느껴집니다. </li>
+                    <li>블룸텐더스: 6명의 고위 성직자 집단. 그들은 꽃잎이 눈을 대신하는 가장 진보된 식물 공생 징후를 보입니다.  블룸텐더스는 정원-성지와 간청자들의 마음을 돌보는 헌신적인 관리자입니다.  그들은 고해 성사, 치유사, 교리 교육자 역할을 합니다.  끊임없이 진정시키는 포자를 확산시키는 덩굴로 감싼 향로를 들고 다니는 것으로 알아볼 수 있습니다. </li>
+                    <li>복음 전도사: 성역 밖에서 정기적으로 볼 수 있는 유일한 아이들 구성원.  꽃가루와 기도문으로 얼룩진 긴 흰색 작업복을 입고, 조용하고 서두르지 않게 폐허가 된 길을 두 명씩 걸어갑니다.  그들의 얼굴은 항상 꽃잎이 박힌 도자기 같은 가면으로 가려져 있으며, 이그드라실의 심장 그 자체에서 자라났다고 하는 화려한 날개 달린 철퇴를 들고 다닙니다.  그들의 위협적인 존재에도 불구하고, 그들은 결코 말하지 않고, 결코 추격하지 않습니다.  그들은 단순히 부서지고, 절뚝거리고, 병든 자들에게 손을 내밀고—거절당하면, 조용히 사라집니다.  민간인들은 그들이 하는 일 때문이 아니라, 그들이 할 수 있는 일 때문에 그들을 두려워합니다.  그들의 도착은 침묵, 문 닫힘, 그리고 숨을 참는 것으로 맞이됩니다.  대부분의 정착지는 그들을 유령처럼 무시하는 것처럼 행동합니다.  그들은 "진정으로 피어난" 최초의 간청자들이었으며, 그들의 변형으로 인해 더 이상 완전히 인간이 아니게 되었거나... 완전히 제정신이 아니게 되어 성역에서 벗어나게 되었다고 합니다. </li>
+                    <li>간청자: 새로 온 입문자들, 종종 신체적으로, 정신적으로, 또는 감정적으로 깊이 고통받습니다.  많은 사람들이 한때 자살을 생각했거나, 감염되었거나, 버림받았습니다.  그들은 침묵의 성찰, 블룸에 대한 시험 노출, 교감 분지에서의 의식적 씻기를 거칩니다.  모두가 살아남는 것은 아닙니다.  살아남는 사람들은 영원히 변합니다. </li>
+                </ul>
+            </p>
+            <p><strong>강점:</strong>
+                <ul>
+                    <li>절대적인 광신적인 충성심과 정서적 일치 </li>
+                    <li>두려움과 심리적 외상에 대한 면역 </li>
+                    <li>BEV 변이 식물군과의 깊은 연결, 강력한 환각제, 마비제, 재생 꽃가루 재배 포함 </li>
+                    <li>감염과 공생하며 장기간 생존하는 능력 </li>
+                    <li>되찾은 구조물 내부에 숨겨진 성역, 감지 또는 공격하기 어려움 </li>
+                </ul>
+            </p>
+            <p><strong>약점:</strong>
+                <ul>
+                    <li>대부분의 재래식 기술을 "개화를 가로막는 장벽"으로 거부 </li>
+                    <li>자주 자멸적이거나 순교 지향적 </li>
+                    <li>고립되고 사회적으로 경멸받음—다른 생존자 집단에게도 이단적이거나 괴물로 여겨짐 </li>
+                    <li>많은 구성원이 이미 중기 감염 상태로, 믿음에도 불구하고 신체적으로 취약함 </li>
+                </ul>
+            </p>
+            <p><strong>관계:</strong>
+                <ul>
+                    <li>워든은 "재탄생의 도살자"입니다—그들은 강철과 불로 신성한 땅을 더럽힙니다. </li>
+                    <li>하베스터는 잘못 인도된 우상 숭배자들, "피어나야 할 것을 치유하려 한다"고 봅니다. </li>
+                    <li>노마드 캐러밴은 헌금하거나 설교를 듣는다면 용인되지만—신뢰하지 않습니다. </li>
+                    <li>언바운드는 위험하지만, 잠재적으로 신앙을 위한 "비옥한 토양"입니다. </li>
+                </ul>
+            </p>
+            <p><strong>참고:</strong> 아이들은 모집하지 않습니다—그들은 받아들입니다.  많은 사람들이 절망 속에서 합류합니다: 감염된 자, 죽어가는 자, 미친 자, 버림받은 자.  불룸필드 근처의 안개 속으로 사라진 말기 환자와 전쟁 트라우마를 겪은 전직 군인들에 대한 소문이 돌며, 며칠 후 다시 목격되면—평온하고, 노래하며, 눈물샘에서 꽃잎이 피어난다고 합니다. </p>
+        </div>
+    </div>
+
+    <div id="aerieLocationModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('aerieLocationModal')">&times;</span>
+            <h2>에어리 (The Aerie) </h2>
+            <p><strong>별칭:</strong> 마지막 보루 (The Last Bastion), 요새의 심장 (The Bulwark's Heart) </p>
+            <p><strong>통제 세력:</strong> 워든 </p>
+            <p><strong>위치:</strong> 콜로라도 스프링스, 콜로라도의 폐허 위에 세워진 에어리는 옛 공군 사관학교의 훼손된 잔해를 둘러싸는 상호 연결된 고층 건물 고리에 자리 잡고 있습니다. </p>
+            <p><strong>설명:</strong> 에어리는 폐허 위에 매달려 있는 도시입니다—콜로라도 스프링스의 잔해에서 솟아오른 수직 요새.  서로 연결된 고층 건물들이 하늘에 격자를 형성하고, 그 상층부는 안전한 주거 구역으로 변모했습니다.  아래 거리들은 오랫동안 감염체와 과성장된 식물에게 내주어졌습니다.  이곳의 삶은 20층에서 시작됩니다. 바람 터빈이 윙윙거리고, 수경 재배 조명이 밤에 희미한 푸른색으로 빛나며, 에어리 시민들은 생존의 리듬에 맞춰 강철 복도를 걷습니다.  엄격한 통제에도 불구하고 에어리는 즐거움이 없는 곳이 아닙니다.  안전 구역의 공동 주방에서는 노인들이 호기심 많은 아이들에게 "계절이 있던 세상" 이야기를 들려줍니다.  병사들은 몰래 들여온 사탕을 나누거나 담배를 위해 이야기를 교환합니다.  일부 발코니에는 오래된 에어컨 덕트에서 자란 토마토 덩굴이 있고, 새벽에는 구두약 냄새와 튀긴 콩 케이크 냄새가 섞여 납니다.  이곳은 질서가 평화를 가져다주는 도시입니다—비록 힘들게 얻은, 때로는 숨 쉬기 힘든 평화라 할지라도.  하지만 에어리의 갑옷 안에는 인간의 심장이 뛰고 있습니다. 자랑스럽고 지쳐 있지만, 단순한 생존 이상을 추구합니다. </p>
+            <p><strong>분위기:</strong> 깨끗하고 엄격하지만, 생기 없는 것은 아닙니다.  규율이 기대되며, 작은 친절은 용인됩니다.  긴장이 있지만—또한 구조와 예측 가능성의 끈질긴 위안이 있습니다. </p>
+            <p><strong>주요 특징:</strong>
+                <ul>
+                    <li><strong>지휘 첨탑 (The Command Spire):</strong> 한때 금융 고층 건물이었으나, 지금은 에어리의 두뇌입니다.  60층—이전에는 헤지 펀드의 스카이라운지였던—은 워든-장군 매독스의 작전실로 사용되며, 녹슨 지도 테이블과 과거 반란으로 생긴 흉터가 있는 벽이 있습니다.  밤에는 희미한 붉은 조명이 구름을 꿰뚫는 수직 검처럼 그 형태를 윤곽을 그립니다. </li>
+                    <li><strong>연단 (The Rostrum):</strong> 한때 교회 종탑이었으나, 지금은 강화된 방송 허브입니다.  웨스트브룩 의원은 매주 여기서 연설하며, 그의 목소리는 오래된 성당 스피커를 통해 울려 퍼집니다.  그의 뒤에 있는 원래의 스테인드글라스는 금이 갔지만 부서지지 않았습니다. </li>
+                    <li><strong>스카이 팜 (Sky-Farms):</strong> 징집병과 사관생도가 관리하는 우뚝 솟은 수직 농장.  한 복도에는 호박 덩굴 커튼 뒤에 "Brunner & James LLP"라고 적힌 오래된 법률 사무소 명판이 여전히 걸려 있습니다.  식량 배급을 받는 십대들은 콩 매시 팔레트 뒤에서 농담을 속삭이고, 때로는 신선한 딸기를 몰래 먹습니다—놀라움을 일으킬 만큼 희귀합니다. </li>
+                    <li><strong>교환소 (The Exchange):</strong> 고급 쇼핑센터의 훼손된 잔해에 자리 잡은 규제된 중앙 시장.  천장에는 "구찌", "마이크로소프트"와 같은 희미한 브랜드가 여전히 남아 있습니다—잃어버린 신의 메아리처럼.  거래는 질서 정연하고, 배급되며, 경비가 삼엄합니다—그러나 일부 판매자는 포장된 상품 안에 손으로 쓴 쪽지를 몰래 넣어둡니다: "8번째 생일 축하해, 자기,"라고 한 번은 적혀 있었습니다.  블랙 마켓 상인들은 부서진 탈의실 뒤에서 속삭입니다. </li>
+                    <li><strong>안전 구역 (Safe Grids):</strong> 20-30층 사이의 주거층.  일상생활이 정밀하지만 즐거움이 없는 것은 아닌 민간인 거주 구역입니다.  근무 교대 사이에 복도 바닥에 분필 그림이 나타납니다.  한 유닛에서는 시리얼 통에 숨겨진 작은 라디오에서 금지된 사랑 노래가 나옵니다.  통금 시간이 있지만—생일과 소등 후의 웃음도 있습니다. </li>
+                </ul>
+            </p>
+            <p><strong>참고:</strong> 에어리는 워든의 공중 드레드노트인 <span class="tooltip-container">아이언 벌처 (The Iron Vulture)<span class="tooltip-text">매독스와 웨스트브룩을 모두 태운다고 알려져 있습니다. </span></span>의 유일한 알려진 도킹 지점입니다.  그것이 도시 위에 그림자를 드리울 때, 아이들은 경외심에 창문으로 달려갑니다—반면 장교들은 조용히 전쟁을 준비합니다. </p>
+        </div>
+    </div>
+
+    <div id="seedbankLocationModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('seedbankLocationModal')">&times;</span>
+            <h2>시드뱅크 (The Seedbank) </h2>
+            <p><strong>별칭:</strong> 떨어지지 않은 세계 (The Unfallen World), 온실 (The Greenhouse) </p>
+            <p><strong>통제 세력:</strong> 하베스터 </p>
+            <p><strong>위치:</strong> 옛 오레곤 주, 태평양 북서부의 고지대 숲에 자리 잡은 연구 요새.  원래 BEV 재앙 이전에는 차세대 생명 공학 벤처 캠퍼스였습니다. </p>
+            <p><strong>설명:</strong> 멀리서 보면 시드뱅크는 종말 이후의 거점처럼 보이지 않습니다.  마치 깨끗하고 현대적인 대학 캠퍼스처럼 보이며, 조경된 부지 곳곳에 매끄러운 흰색 복합 건물과 거대한 유리벽이 흩어져 있습니다.  이곳은 주변의 황폐하고 과성장된 황야와 극명한 대조를 이룹니다.  대부분의 구조물은 살아있는 식물 기반 태양열 집열기와 수직 벽 정원과 완벽하게 통합되어 있으며, 조용하고 깨끗한 에너지로 윙윙거립니다.  이곳의 분위기는 공원과 같은 평온함이며, 세상이 끝나는 것을 잊은 듯한 거품입니다.  이러한 환상은 지하층으로 내려가면 산산조각 납니다.  지표면 아래에는 시설의 진정한 목적이 있습니다: BIOME-0, 유기 격리 구역.  이곳은 살아있는 실험실이며, 꽃 좀비, 기생 곰팡이, 변이 식물로 이루어진 세심하게 재현된 생태계가 임상적이고 무자비한 감시 아래 관찰됩니다.  상층부의 깨끗하고 조용한 복도는 강화된 격리 문, 멸균된 공기, 그리고 멀리서 들려오는 격리된 종말의 불안한 소리로 바뀝니다. </p>
+            <p><strong>일반 복장:</strong> 깨끗한 흰색 실험복, "진보적인 인류"에 대한 믿음의 상징.  <strong>복장 스타일:</strong> 그들의 옷은 실용적입니다—간단한 바지, 기능성 신발, 그리고 유비쿼터스 코트—외관보다 유용성을 선호합니다. </p>
+            <p><strong>일반적인 태도:</strong> 연구원들은 차분하고 절제된 목적을 가지고 움직입니다.  그들의 침착함은 무관심에서 오는 것이 아니라, 집중하고 생존해야 할 필요성에서 비롯됩니다. </p>
+            <p><strong>감정적 문화:</strong> 감정이 금지된 것은 아니지만, 조심스럽게 관리됩니다.  공개적인 표현은 드물지만, 없는 것은 아닙니다.  <strong>감정적 세부 사항:</strong> 일부는 복도를 걸으면서 조용히 콧노래를 부릅니다.  다른 이들은 가족 사진이나 오래된 열쇠고리와 같은 개인 물품을 실험실 장비 뒤에 숨겨둡니다. </p>
+            <p><strong>사회적 행동:</strong> 휴게실은 조용하지만 차갑지 않습니다.  건조한 농담, 조심스러운 웃음, 짧은 대화가 정상적인 감각을 유지하는 데 도움이 됩니다. </p>
+            <p><strong>문화적 참고 사항:</strong> 실험복은 지식과 적응을 통해 인류를 발전시키려는 그들의 사명을 나타내는 믿음의 유니폼처럼 여겨집니다.  <strong>봉인 구역:</strong> 일부 오래된 구역은 실패한 격리 후 침입 식물 성장에 의해 봉인되었습니다.  이 과성장된 문은 경외심과 두려움으로 다루어집니다. </p>
+            <p><strong>전반적인 분위기:</strong> 시드뱅크 내부의 삶은 유리잔 속의 꽃처럼 정지된—통제되고, 신중하며, 약간 연약한—느낌입니다. </p>
+            <p><strong>주요 구역:</strong>
+                <ul>
+                    <li><strong>중앙 첨탑 (The Central Spire):</strong> 주요 행정 및 데이터 허브.  로비에는 "생명은 오류를 견뎌야 한다"는 모토가 새겨진 하베스터 설립자의 엄격한 흉상이 있습니다.  수석 연구원의 사무실, 주요 데이터 서버, 그리고 최상위 보안 지휘부를 수용합니다. </li>
+                    <li><strong>베르단트 연구실 (The Verdant Labs):</strong> 핵심 연구 및 분석 구역.  이곳에서 BEV가 해부되고 실험됩니다.  일부 실험실은 그 자체가 식물-기계 하이브리드이며, 기술과 돌연변이가 공존하는 반감염된 통제 환경에서만 기능합니다. </li>
+                    <li><strong>공생 부문 (The Symbiosis Sector):</strong> 억제된 감염을 가진 시험 대상이 수용되는 일련의 고립된 인공 생물 군계.  실험적인 식물 기반 장기 이식을 받은 사람들이 모니터링되고 고통스러운 정체 상태로 살고 있는 병동입니다—하베스터의 살아있는 "미래 가능성"입니다. </li>
+                    <li><strong>숲 (The Grove):</strong> 캠퍼스 중심부에 있는 거대한 반구형 유리 온실.  salvaged 씨앗과 유전자 샘플에서 재배된 수천 종의 멸종되거나 멸종 위기에 처한 식물 종의 고향인 인공적으로 유지되는 낙원입니다.  잃어버린 세계에 대한 아름답고 비극적인 기념물 역할을 합니다. </li>
+                </ul>
+            </p>
+        </div>
+    </div>
+
+    <div id="bloomfieldLocationModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('bloomfieldLocationModal')">&times;</span>
+            <h2>블룸필드 (Bloomfield) </h2>
+            <p><strong>통제 세력:</strong> 블룸의 아이들 </p>
+            <p><strong>위치:</strong> 뉴욕 북부의 정신병원 폐허가 과성장하여 생체 발광 식물과 짙은 안개로 뒤덮인 곳.  이곳은 에덴의 흉터의 자매 성역으로 속삭여집니다. </p>
+            <p><strong>설명:</strong> 블룸필드는 한때 정신병원이었던 폐허였지만, 이제는 블룸의 아이들의 중심 성역으로 변모했습니다.  건물은 무성한 변이 식물들로 뒤덮여 있으며, 특히 밤에는 신비로운 생체 발광 식물들이 빛을 발합니다.  이곳은 끊임없이 안개가 자욱하여 신비롭고 몽환적인 분위기를 자아냅니다.  내부에는 '교감 분지(Communion Basin)'라는 중요한 장소가 있으며, 이는 아이들의 의식과 깊은 관련이 있습니다.  블룸필드는 세라피엘의 신앙이 시작된 곳이자, 블룸의 아이들이 BEV를 신성한 변형으로 받아들이는 중심지입니다. </p>
+            <p><strong>주요 특징:</strong>
+                <ul>
+                    <li><strong>생체 발광 식물군:</strong> 밤에 빛을 발하여 신비로운 분위기를 연출하며, 아이들에게는 신성한 존재로 여겨집니다. </li>
+                    <li><strong>안개 낀 복도:</strong> 항상 짙은 안개가 자욱하여 길을 잃기 쉽고, 신비로운 느낌을 더합니다. </li>
+                    <li><strong>교감 분지 (Communion Basin):</strong> 블룸의 아이들의 의식이 행해지는 중요한 장소로, 간청자들이 '블룸'을 경험하는 곳입니다. </li>
+                </ul>
+            </p>
+            <p><strong>참고:</strong> 블룸필드는 거대한 <span class="tooltip-container">이그드라실의 심장 (Yggdrasil's Heart)<span class="tooltip-text">블룸필드 정신병원에서 처음 출현한 거대한 심종. 블룸의 아이들은 이를 신성시합니다. </span></span>이라고 불리는 심종 개체의 위치와도 깊은 연관이 있습니다.  이그드라실의 심장은 이 지역의 생물 군계를 통제하고 아이들의 신앙의 중심이 됩니다. </p>
+        </div>
+    </div>
+
+
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tab-button");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var accordionHeaders = document.querySelectorAll('.accordion-header');
+            accordionHeaders.forEach(function(header) {
+                header.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                    var content = this.nextElementSibling;
+                    if (content.classList.contains('show')) {
+                        content.classList.remove('show');
+                        content.style.maxHeight = 0;
+                        content.style.padding = "0 18px";
+                    } else {
+                        content.classList.add('show');
+                        content.style.maxHeight = content.scrollHeight + "px";
+                        content.style.padding = "18px";
+                    }
+                });
+            });
+
+            // Initial open for the first tab
+            document.querySelector('.tab-button').click();
+
+            // Modals functionality
+            window.openModal = function(modalId) {
+                document.getElementById(modalId).style.display = "block";
+            }
+
+            window.closeModal = function(modalId) {
+                document.getElementById(modalId).style.display = "none";
+            }
+
+            // Close modal when clicking outside of it
+            window.onclick = function(event) {
+                var modals = document.querySelectorAll('.modal');
+                modals.forEach(function(modal) {
+                    if (event.target == modal) {
+                        modal.style.display = "none";
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
